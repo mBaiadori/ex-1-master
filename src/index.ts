@@ -23,7 +23,7 @@ app.listen(port, () =>
   console.log(`App listening on http://127.0.0.1:${port}`)
 );
 
-app.use((err, req, res, next) => {
+app.use((err, req, res, _) => {
   if (err && err.statusCode)
     res.status(err.statusCode).json({ message: err.message });
   else res.status(500).json({ message: "Ooops sometinhg was wrong" });

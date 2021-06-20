@@ -1,12 +1,13 @@
 import { Router } from "express";
+import asyncHandler from "express-async-handler";
 import { articleController, authorsController } from "./controllers";
 
 const r = Router();
 
-r.get("/authors/list", authorsController.list);
+r.get("/authors/list", asyncHandler(authorsController.list));
 //Articles
-r.post("/article", articleController.post);
-r.put("/article", articleController.put);
-r.delete("/article", articleController.del);
+r.post("/article", asyncHandler(articleController.post));
+r.put("/article", asyncHandler(articleController.put));
+r.delete("/article", asyncHandler(articleController.del));
 
 export default r;
