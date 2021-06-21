@@ -7,7 +7,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "removeComments": true,
-    "types": ["express"],
+    "types": ["express", "jest"],
     // "typeRoots": ["./node_modules/@types", "./src/@types"],
     "esModuleInterop": true,
     "resolveJsonModule": true,
@@ -16,6 +16,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src", "src/*/.ts", "src/*/.js", "src/*/.json", "tests"],
-  "exclude": ["node_modules", "*/.test.ts"]
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules"]
 }
