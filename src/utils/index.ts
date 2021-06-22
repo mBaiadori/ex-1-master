@@ -1,1 +1,2 @@
-export * from "./fileManipulation";
+export * from './fileManipulation';
+export * from './arrayManipulation';

@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --optimize_for_size -r ts-node/register src/index.ts",
+    "start": "node --optimize_for_size -r ts-node/register src/server.ts",
     "test": "jest",
-    "dev": "ts-node-dev --respawn --transpile-only --inspect --ignore-watch  node_modules src/index.ts"
+    "dev": "ts-node-dev --respawn --transpile-only --inspect --ignore-watch  node_modules src/server.ts"
   },
   "author": "",
   "license": "ISC",

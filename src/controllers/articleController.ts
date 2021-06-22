@@ -1,13 +1,17 @@
 import { IArticle, IAuthors } from './../entities';
 import { NextFunction, Request, Response } from 'express';
-import { addObjectInArrayFile, readJsonArrayFile } from '../utils';
+import {
+  addObjectInArrayFile,
+  readJsonArrayFile,
+  updateArrayFile
+} from '../utils';
 import { FieldError } from '../errors';
 
 const articlesFilePath = 'src/data/articles.json';
 const authorsFilePath = 'src/data/authors.json';
 
 export const articleController = (() => {
-  const post = async (req: Request, res: Response, next: NextFunction) => {
+  const post = async (req: Request, res: Response) => {
     const articlesData = await readJsonArrayFile(articlesFilePath);
     const authorsData = await readJsonArrayFile(authorsFilePath);
     const { author_id, name, title } = req.body;
@@ -58,8 +62,8 @@ export const articleController = (() => {
     await addObjectInArrayFile(articlesFilePath, article);
     res.status(201).send(`Article id: ${article.id} was created`);
   };
-  const put = async (req: Request, res: Response, next: NextFunction) => {
-    const articlesData: object[] = await readJsonArrayFile(articlesFilePath);
+  const put = async (req: Request, res: Response) => {
+    const articlesData: IArticle[] = await readJsonArrayFile(articlesFilePath);
 
     for (let i = 0; i < req.body.length; i++) {
       const { id, author_id, title } = req.body[i];
@@ -69,21 +73,32 @@ export const articleController = (() => {
       if (!title)
         throw new FieldError(`Title must be provided, DataIndex:${i}`);
 
-      const hasArticle = articlesData.find((id) => id === id);
+      const id_article = id;
+      const hasArticle = articlesData.find(({ id }) => id === id_article);
       if (!hasArticle) throw new FieldError(`Article not find, DataIndex:${i}`);
 
       articlesData.forEach((article: IArticle, index: number) => {
         if (article.id === id) articlesData[index] = req.body[i];
       });
+      await updateArrayFile(articlesFilePath, articlesData);
     }
-    // const { id, author_id, title } = req.body[0];
-    // console.log(author_id);
-
-    res.status(202).send(`${req.body.length} article(s) was altered`);
+    res.sendStatus(204);
   };
-  const del = async (req: Request, res: Response, next: NextFunction) => {
-    const { author_id, name, title } = req.body;
-    res.status(202).send('The articles was altered');
+  const del = async (req: Request, res: Response) => {
+    const articlesData: IArticle[] = await readJsonArrayFile(articlesFilePath);
+    for (let i = 0; i < req.body.length; i++) {
+      const id = Number(req.body[i]);
+      let index = 0;
+      const result = articlesData.filter((article, i) => {
+        if (article.id === id) index = i;
+        return article.id === id;
+      });
+      if (result.length === 0)
+        throw new FieldError(`Article not find, DataIndex:${i}`);
+      articlesData.splice(index, 1);
+    }
+    await updateArrayFile(articlesFilePath, articlesData);
+    res.sendStatus(204);
   };
   return {
     post,
