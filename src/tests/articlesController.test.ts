@@ -4,7 +4,7 @@ import { updateArrayFile } from '../utils';
 const articlesBackup = require('../data/articlesBackup.json');
 const articlesFilePath = 'src/data/articles.json';
 describe('[POST] > /article', () => {
-  it('Send Req without a name Should return stausCode 201', async () => {
+  it('Send Req without a name, Should return stausCode 201', async () => {
     const res = await request(app).post('/article').send({
       author_id: 12,
       name: '',
@@ -12,7 +12,7 @@ describe('[POST] > /article', () => {
     });
     expect(res.statusCode).toEqual(201);
   });
-  it('Send Req without a author_id Should return stausCode 201', async () => {
+  it('Send Req without a author_id, but with name, Should return stausCode 201', async () => {
     const res = await request(app).post('/article').send({
       author_id: '',
       name: 'New Author',
@@ -21,7 +21,7 @@ describe('[POST] > /article', () => {
     expect(res.statusCode).toEqual(201);
   });
 
-  it('Send Req without author_id and name Should return stausCode 400', async () => {
+  it('Send Req without author_id and name, Should return stausCode 400', async () => {
     const res = await request(app).post('/article').send({
       author_id: '',
       name: '',
@@ -31,7 +31,7 @@ describe('[POST] > /article', () => {
     expect(res.body.message).toEqual('Author id or name must be provided');
   });
 
-  it('Send Req without title Should return stausCode 400', async () => {
+  it('Send Req without title, Should return stausCode 400', async () => {
     const res = await request(app).post('/article').send({
       author_id: '12',
       name: '',
@@ -146,6 +146,10 @@ describe('[DELETE] > / Article', () => {
   });
   it('Try delete single Article it not exist, Should return StatusCode 400  ', async () => {
     const res = await request(app).delete('/article').send([130]);
+    expect(res.statusCode).toEqual(400);
+  });
+  it('Try delete multiple Article it some not exist, Should return StatusCode 400  ', async () => {
+    const res = await request(app).delete('/article').send([1, 2, 120]);
     expect(res.statusCode).toEqual(400);
   });
 });
